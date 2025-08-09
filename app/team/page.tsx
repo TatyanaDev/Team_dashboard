@@ -1,13 +1,15 @@
 "use client";
 
 import { ChangeEvent, useState } from "react";
-import { useEmployees } from "../hooks/useEmployees";
+import { generateCSV } from "../services/csvExportService";
 import EmployeeCard from "../components/EmployeeCard";
+import { useEmployees } from "../hooks/useEmployees";
+import { FilteredEmployee } from "../types/types";
 
 const TeamPage = () => {
   const { employees, loading, error } = useEmployees();
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState<string>("All");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => setSearchTerm(event.target.value);
 
@@ -27,6 +29,12 @@ const TeamPage = () => {
     return matchesName && matchesDepartment;
   });
 
+  const handleExportClick = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const formattedEmployees: FilteredEmployee[] = filteredEmployees.map(({ avatarUrl, ...rest }) => rest);
+    generateCSV(formattedEmployees, "team_list.csv");
+  };
+
   return (
     <div>
       <input type="text" placeholder="Search by name" value={searchTerm} onChange={handleSearchChange} />
@@ -36,6 +44,8 @@ const TeamPage = () => {
         <option value="Technical">Technical</option>
         <option value="Finance">Finance</option>
       </select>
+
+      <button onClick={handleExportClick}>Export to CSV</button>
 
       {filteredEmployees.length === 0 ? (
         <div>No employees found</div>

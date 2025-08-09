@@ -9,6 +9,8 @@ export interface Employee {
   telegram?: string;
 }
 
+export type FilteredEmployee = Omit<Employee, "avatarUrl">;
+
 export interface Task {
   id: string;
   title: string;
