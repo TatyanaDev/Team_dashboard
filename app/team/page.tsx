@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, memo, useCallback, useMemo, useState } from "react";
 import { generateCSV } from "../services/csvExportService";
 import type { FilteredEmployee } from "../types/types";
 import EmployeeCard from "../components/EmployeeCard";
@@ -11,9 +11,21 @@ const TeamPage = () => {
   const [selectedDepartment, setSelectedDepartment] = useState<string>("All");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => setSearchTerm(event.target.value);
+  const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  }, []);
 
-  const handleDepartmentChange = (event: ChangeEvent<HTMLSelectElement>) => setSelectedDepartment(event.target.value);
+  const handleDepartmentChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDepartment(event.target.value);
+  }, []);
+
+  const filteredEmployees = useMemo(() => {
+    return employees.filter((employee) => {
+      const matchesName = employee.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDepartment = selectedDepartment === "All" || employee.department === selectedDepartment;
+      return matchesName && matchesDepartment;
+    });
+  }, [employees, searchTerm, selectedDepartment]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -22,12 +34,6 @@ const TeamPage = () => {
   if (error) {
     return <div>{error}</div>;
   }
-
-  const filteredEmployees = employees.filter((employee) => {
-    const matchesName = employee.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = selectedDepartment === "All" || employee.department === selectedDepartment;
-    return matchesName && matchesDepartment;
-  });
 
   const handleExportClick = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,4 +66,4 @@ const TeamPage = () => {
   );
 };
 
-export default TeamPage;
+export default memo(TeamPage);

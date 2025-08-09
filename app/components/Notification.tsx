@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { Snackbar, Alert } from "@mui/material";
 import type { NotificationData } from "../types/types";
 
@@ -15,4 +15,4 @@ const Notification: FC<NotificationProps> = ({ notification, closeNotification }
   </Snackbar>
 );
 
-export default Notification;
+export default memo(Notification);

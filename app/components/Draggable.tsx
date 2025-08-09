@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import type { Task } from "../types/types";
 
@@ -29,4 +29,4 @@ const Draggable: FC<DraggableProps> = ({ task }) => {
   );
 };
 
-export default Draggable;
+export default memo(Draggable);

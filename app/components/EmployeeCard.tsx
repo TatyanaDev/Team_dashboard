@@ -1,6 +1,6 @@
+import { FC, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC } from "react";
 import type { Employee } from "../types/types";
 
 interface EmployeeCardProps {
@@ -18,4 +18,4 @@ const EmployeeCard: FC<EmployeeCardProps> = ({ employee }) => (
   </div>
 );
 
-export default EmployeeCard;
+export default memo(EmployeeCard);

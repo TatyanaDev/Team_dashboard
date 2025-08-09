@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 
 interface ConfirmationDialogProps {
@@ -24,4 +24,4 @@ const ConfirmationDialog: FC<ConfirmationDialogProps> = ({ open, onClose, onConf
   </Dialog>
 );
 
-export default ConfirmationDialog;
+export default memo(ConfirmationDialog);
