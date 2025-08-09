@@ -1,0 +1,161 @@
+{
+  "employees": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Developer",
+      "department": "Technical",
+      "status": "active",
+      "phone": "123-456-7890",
+      "telegram": "john_doe"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Sales Manager",
+      "department": "Sales",
+      "status": "inactive",
+      "phone": "234-567-8901",
+      "telegram": "jane_smith"
+    },
+    {
+      "id": "3",
+      "name": "Alice Johnson",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Finance Specialist",
+      "department": "Finance",
+      "status": "active",
+      "phone": "345-678-9012",
+      "telegram": "alice_johnson"
+    },
+    {
+      "id": "4",
+      "name": "Bob Brown",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "UI/UX Designer",
+      "department": "Technical",
+      "status": "inactive",
+      "phone": "456-789-0123",
+      "telegram": "bob_brown"
+    },
+    {
+      "id": "5",
+      "name": "Charlie Green",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Product Manager",
+      "department": "Sales",
+      "status": "active",
+      "phone": "567-890-1234",
+      "telegram": "charlie_green"
+    },
+    {
+      "id": "6",
+      "name": "David Williams",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Developer",
+      "department": "Technical",
+      "status": "active",
+      "phone": "678-901-2345",
+      "telegram": "david_williams"
+    },
+    {
+      "id": "7",
+      "name": "Eva Martinez",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Marketing Specialist",
+      "department": "Sales",
+      "status": "inactive",
+      "phone": "789-012-3456",
+      "telegram": "eva_martinez"
+    },
+    {
+      "id": "8",
+      "name": "Franklin Lee",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Technical Lead",
+      "department": "Technical",
+      "status": "active",
+      "phone": "890-123-4567",
+      "telegram": "franklin_lee"
+    },
+    {
+      "id": "9",
+      "name": "Grace Kim",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Financial Analyst",
+      "department": "Finance",
+      "status": "inactive",
+      "phone": "901-234-5678",
+      "telegram": "grace_kim"
+    },
+    {
+      "id": "10",
+      "name": "Henry White",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "HR Specialist",
+      "department": "Technical",
+      "status": "active",
+      "phone": "012-345-6789",
+      "telegram": "henry_white"
+    },
+    {
+      "id": "11",
+      "name": "Isabella Adams",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "QA Tester",
+      "department": "Technical",
+      "status": "inactive",
+      "phone": "123-456-7890",
+      "telegram": "isabella_adams"
+    },
+    {
+      "id": "12",
+      "name": "Jack Wilson",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Support Specialist",
+      "department": "Technical",
+      "status": "active",
+      "phone": "234-567-8901",
+      "telegram": "jack_wilson"
+    },
+    {
+      "id": "13",
+      "name": "Kathy O'Connor",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Data Scientist",
+      "department": "Technical",
+      "status": "active",
+      "phone": "345-678-9012",
+      "telegram": "kathy_oconnor"
+    },
+    {
+      "id": "14",
+      "name": "Liam Harris",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Customer Success Manager",
+      "department": "Customer Support",
+      "status": "inactive",
+      "phone": "456-789-0123",
+      "telegram": "liam_harris"
+    },
+    {
+      "id": "15",
+      "name": "Mia Scott",
+      "avatarUrl": "https://api.dicebear.com/9.x/pixel-art/svg?seed=John",
+      "role": "Project Manager",
+      "department": "Sales",
+      "status": "active",
+      "phone": "567-890-1234",
+      "telegram": "mia_scott"
+    }
+  ],
+  "tasks": [
+    { "id": "1", "title": "Complete project report", "status": "To Do" },
+    { "id": "2", "title": "Bug fixing in payment gateway", "status": "In Progress" },
+    { "id": "3", "title": "Design new user interface for app", "status": "Done" },
+    { "id": "4", "title": "Implement new search feature", "status": "To Do" },
+    { "id": "5", "title": "Prepare presentation for client meeting", "status": "In Progress" }
+  ]
+}
