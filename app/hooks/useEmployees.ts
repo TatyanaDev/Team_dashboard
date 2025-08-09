@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Employee } from "../types/types";
+import type { Employee } from "../types/types";
 
 export const useEmployees = (id?: string) => {
   const [employee, setEmployee] = useState<Employee | null>(null);

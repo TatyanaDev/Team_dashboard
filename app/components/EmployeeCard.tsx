@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
-import { Employee } from "../types/types";
+import type { Employee } from "../types/types";
 
 interface EmployeeCardProps {
   employee: Employee;

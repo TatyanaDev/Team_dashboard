@@ -2,9 +2,9 @@
 
 import { ChangeEvent, useState } from "react";
 import { generateCSV } from "../services/csvExportService";
+import type { FilteredEmployee } from "../types/types";
 import EmployeeCard from "../components/EmployeeCard";
 import { useEmployees } from "../hooks/useEmployees";
-import { FilteredEmployee } from "../types/types";
 
 const TeamPage = () => {
   const { employees, loading, error } = useEmployees();

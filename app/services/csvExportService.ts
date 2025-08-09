@@ -1,4 +1,4 @@
-import { FilteredEmployee } from "../types/types";
+import type { FilteredEmployee } from "../types/types";
 
 export const generateCSV = (data: FilteredEmployee[], filename: string) => {
   // Array to store the rows of the CSV

@@ -16,3 +16,11 @@ export interface Task {
   title: string;
   status: "To Do" | "In Progress" | "Done";
 }
+
+export type TaskStatus = Task["status"];
+
+export interface NotificationData {
+  open: boolean;
+  message: string;
+  severity: "success" | "error";
+}

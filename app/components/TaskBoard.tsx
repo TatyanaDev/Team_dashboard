@@ -1,36 +1,18 @@
-import { DndContext, DragEndEvent, useDroppable, useDraggable } from "@dnd-kit/core";
-import { FC, useState, useEffect } from "react";
-import { Alert, Snackbar } from "@mui/material";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { useState, useEffect } from "react";
+import type { NotificationData, Task, TaskStatus } from "../types/types";
 import { updateTaskOnServer } from "../services/taskService";
 import { useTasks } from "../hooks/useTasks";
-import { Task } from "../types/types";
-
-type TaskStatus = "To Do" | "In Progress" | "Done";
-
-interface DroppableProps {
-  status: TaskStatus;
-  tasks: Task[];
-}
-
-interface DraggableProps {
-  task: Task;
-}
-
-interface Notification {
-  open: boolean;
-  message: string;
-  severity: "success" | "error";
-  key: number;
-}
+import Notification from "./Notification";
+import Droppable from "./Droppable";
 
 const TaskBoard = () => {
   const { tasks, setTasks, loading, error } = useTasks();
   const [optimisticTasks, setOptimisticTasks] = useState<Task[]>([]);
-  const [notification, setNotification] = useState<Notification>({
+  const [notification, setNotification] = useState<NotificationData>({
     open: false,
     message: "",
     severity: "success",
-    key: 0,
   });
 
   useEffect(() => {
@@ -57,7 +39,6 @@ const TaskBoard = () => {
         open: true,
         message,
         severity,
-        key: Date.now(),
       });
     }, 100);
   };
@@ -71,7 +52,7 @@ const TaskBoard = () => {
         return;
       }
 
-      const newStatus = over.id as TaskStatus;
+      const newStatus = over.id;
       if (movedTask.status === newStatus) {
         // No status change, don't show notification
         return;
@@ -100,60 +81,16 @@ const TaskBoard = () => {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div style={{ display: "flex" }}>
-        {(["To Do", "In Progress", "Done"] as TaskStatus[]).map((status) => (
-          <Droppable key={status} status={status} tasks={optimisticTasks || []} />
-        ))}
-      </div>
-
-      <Snackbar open={notification.open} autoHideDuration={2000} onClose={closeNotification} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
-        <Alert onClose={closeNotification} severity={notification.severity} variant="filled">
-          {notification.message}
-        </Alert>
-      </Snackbar>
-    </DndContext>
-  );
-};
-
-const Droppable: FC<DroppableProps> = ({ status, tasks }) => {
-  const { setNodeRef } = useDroppable({
-    id: status,
-  });
-
-  return (
-    <div ref={setNodeRef} style={{ margin: "0 10px", flex: 1 }}>
-      <h3>{status}</h3>
-      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
-        {tasks
-          .filter((task) => task.status === status)
-          .map((task) => (
-            <Draggable key={task.id} task={task} />
+    <div>
+      <DndContext onDragEnd={handleDragEnd}>
+        <div style={{ display: "flex" }}>
+          {["To Do", "In Progress", "Done"].map((status) => (
+            <Droppable key={status} status={status} tasks={optimisticTasks} />
           ))}
-      </div>
-    </div>
-  );
-};
+        </div>
+      </DndContext>
 
-const Draggable: FC<DraggableProps> = ({ task }) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: task.id,
-  });
-
-  return (
-    <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      style={{
-        padding: "5px",
-        marginBottom: "5px",
-        border: "1px solid #ccc",
-        backgroundColor: "#fff",
-        cursor: "move",
-      }}
-    >
-      {task.title}
+      <Notification notification={notification} closeNotification={closeNotification} />
     </div>
   );
 };
