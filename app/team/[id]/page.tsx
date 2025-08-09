@@ -2,16 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
 import { useEmployees } from "../../hooks/useEmployees";
 import TaskBoard from "../../components/TaskBoard";
 
 const EmployeeProfilePage = () => {
   const { id } = useParams();
   const { employees, loading, error, updateEmployee } = useEmployees();
-  const [tab, setTab] = useState<"info" | "tasks">("info");
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [phone, setPhone] = useState<string>("");
   const [telegram, setTelegram] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [tab, setTab] = useState<"info" | "tasks">("info");
+  const [phone, setPhone] = useState<string>("");
 
   const employee = employees.find((employee) => employee.id === id);
 
@@ -34,9 +36,12 @@ const EmployeeProfilePage = () => {
     return <div>Employee not found</div>;
   }
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = () => setOpenDialog(true);
+
+  const handleConfirmSave = () => {
     updateEmployee(id as string, { phone: phone || "", telegram: telegram || "" });
     setIsEditing(false);
+    setOpenDialog(false);
   };
 
   const handleCancelChanges = () => {
@@ -88,6 +93,8 @@ const EmployeeProfilePage = () => {
           <TaskBoard />
         </div>
       )}
+
+      <ConfirmationDialog open={openDialog} onClose={() => setOpenDialog(false)} onConfirm={handleConfirmSave} title="Confirm Changes" message="Are you sure you want to save these changes?" />
     </div>
   );
 };
