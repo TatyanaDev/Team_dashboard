@@ -11,8 +11,9 @@ export const useTasks = () => {
       try {
         setLoading(true);
         setTimeout(async () => {
-          const mockData = await import("../../public/mockData.json");
-          const tasksData = mockData.tasks as Task[];
+          const { tasks } = await import("../../public/tasks.json");
+          const tasksData = tasks as Task[];
+
           setTasks(tasksData);
           setLoading(false);
         }, 1000);

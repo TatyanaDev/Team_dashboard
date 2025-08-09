@@ -24,8 +24,8 @@ export const useEmployees = (id?: string) => {
       } else {
         setTimeout(async () => {
           try {
-            const mockData = await import("../../public/mockData.json");
-            const employeesData = mockData.employees as Employee[];
+            const { employees } = await import("../../public/employees.json");
+            const employeesData = employees as Employee[];
 
             if (id) {
               const foundEmployee = employeesData.find((emp) => emp.id === id);

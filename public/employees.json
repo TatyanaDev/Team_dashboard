@@ -1,0 +1,154 @@
+{
+  "employees": [
+    {
+      "id": "1",
+      "name": "Aidan Williams",
+      "avatarUrl": "/aidan_williams.png",
+      "role": "Developer",
+      "department": "Technical",
+      "status": "active",
+      "phone": "123-456-7890",
+      "telegram": "aidan_williams"
+    },
+    {
+      "id": "2",
+      "name": "Amaya Brown",
+      "avatarUrl": "/amaya_brown.png",
+      "role": "Sales Manager",
+      "department": "Sales",
+      "status": "inactive",
+      "phone": "234-567-8901",
+      "telegram": "amaya_brown"
+    },
+    {
+      "id": "3",
+      "name": "Easton Lee",
+      "avatarUrl": "/easton_lee.png",
+      "role": "Finance Specialist",
+      "department": "Finance",
+      "status": "active",
+      "phone": "345-678-9012",
+      "telegram": "easton_lee"
+    },
+    {
+      "id": "4",
+      "name": "Eden Green",
+      "avatarUrl": "/eden_green.png",
+      "role": "UI/UX Designer",
+      "department": "Technical",
+      "status": "inactive",
+      "phone": "456-789-0123",
+      "telegram": "eden_green"
+    },
+    {
+      "id": "5",
+      "name": "Jocelyn Harris",
+      "avatarUrl": "/jocelyn_harris.png",
+      "role": "Product Manager",
+      "department": "Sales",
+      "status": "active",
+      "phone": "567-890-1234",
+      "telegram": "jocelyn_harris"
+    },
+    {
+      "id": "6",
+      "name": "Kimberly Scott",
+      "avatarUrl": "/kimberly_scott.png",
+      "role": "Developer",
+      "department": "Technical",
+      "status": "active",
+      "phone": "678-901-2345",
+      "telegram": "kimberly_scott"
+    },
+    {
+      "id": "7",
+      "name": "Maria Turner",
+      "avatarUrl": "/maria_turner.png",
+      "role": "Marketing Specialist",
+      "department": "Sales",
+      "status": "inactive",
+      "phone": "789-012-3456",
+      "telegram": "maria_turner"
+    },
+    {
+      "id": "8",
+      "name": "Oliver King",
+      "avatarUrl": "/oliver_king.png",
+      "role": "Technical Lead",
+      "department": "Technical",
+      "status": "active",
+      "phone": "890-123-4567",
+      "telegram": "oliver_king"
+    },
+    {
+      "id": "9",
+      "name": "Robert Young",
+      "avatarUrl": "/robert_young.png",
+      "role": "Financial Analyst",
+      "department": "Finance",
+      "status": "inactive",
+      "phone": "901-234-5678",
+      "telegram": "robert_young"
+    },
+    {
+      "id": "10",
+      "name": "Ryker Adams",
+      "avatarUrl": "/ryker_adams.png",
+      "role": "HR Specialist",
+      "department": "Technical",
+      "status": "active",
+      "phone": "012-345-6789",
+      "telegram": "ryker_adams"
+    },
+    {
+      "id": "11",
+      "name": "Sadie Mitchell",
+      "avatarUrl": "/sadie_mitchell.png",
+      "role": "QA Tester",
+      "department": "Technical",
+      "status": "inactive",
+      "phone": "123-456-7890",
+      "telegram": "sadie_mitchell"
+    },
+    {
+      "id": "12",
+      "name": "Sara Nelson",
+      "avatarUrl": "/sara_nelson.png",
+      "role": "Support Specialist",
+      "department": "Technical",
+      "status": "active",
+      "phone": "234-567-8901",
+      "telegram": "sara_nelson"
+    },
+    {
+      "id": "13",
+      "name": "Sophia Carter",
+      "avatarUrl": "/sophia_carter.png",
+      "role": "Data Scientist",
+      "department": "Technical",
+      "status": "active",
+      "phone": "345-678-9012",
+      "telegram": "sophia_carter"
+    },
+    {
+      "id": "14",
+      "name": "Vivian Walker",
+      "avatarUrl": "/vivian_walker.png",
+      "role": "Finance Manager",
+      "department": "Finance",
+      "status": "inactive",
+      "phone": "456-789-0123",
+      "telegram": "vivian_walker"
+    },
+    {
+      "id": "15",
+      "name": "Jack Wilson",
+      "avatarUrl": "/jack_wilson.png",
+      "role": "Project Manager",
+      "department": "Sales",
+      "status": "active",
+      "phone": "567-890-1234",
+      "telegram": "jack_wilson"
+    }
+  ]
+}
