@@ -7,24 +7,24 @@ export const useTasks = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        setLoading(true);
-        setTimeout(async () => {
+    (async () => {
+      setLoading(true);
+      setError(null);
+
+      setTimeout(async () => {
+        try {
           const { tasks } = await import("../../public/tasks.json");
           const tasksData = tasks as Task[];
 
           setTasks(tasksData);
+        } catch (error) {
+          console.error(error);
+          setError("Error fetching tasks");
+        } finally {
           setLoading(false);
-        }, 1000);
-      } catch (error) {
-        console.error(error);
-        setError("Error fetching tasks");
-        setLoading(false);
-      }
-    };
-
-    loadTasks();
+        }
+      }, 1000);
+    })();
   }, []);
 
   return { tasks, setTasks, loading, error };

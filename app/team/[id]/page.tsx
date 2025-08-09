@@ -13,7 +13,7 @@ const EmployeeProfilePage = () => {
   const [phone, setPhone] = useState<string>("");
   const [telegram, setTelegram] = useState<string>("");
 
-  const employee = employees.find((emp) => emp.id === id);
+  const employee = employees.find((employee) => employee.id === id);
 
   useEffect(() => {
     if (employee) {

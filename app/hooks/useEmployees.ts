@@ -8,18 +8,24 @@ export const useEmployees = (id?: string) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const loadEmployees = async () => {
+    const handleEmployeeData = (employeesData: Employee[]) => {
+      if (id) {
+        const foundEmployee = employeesData.find((emp) => emp.id === id);
+        setEmployee(foundEmployee || null);
+      } else {
+        setEmployees(employeesData);
+      }
+    };
+
+    (async () => {
+      setLoading(true);
+      setError(null);
+
       const storedEmployees = localStorage.getItem("employees");
 
       if (storedEmployees) {
-        const employeesData = JSON.parse(storedEmployees) as Employee[];
-        if (id) {
-          const foundEmployee = employeesData.find((emp) => emp.id === id);
-          setEmployee(foundEmployee || null);
-        } else {
-          setEmployees(employeesData);
-        }
-
+        const employeesData: Employee[] = JSON.parse(storedEmployees);
+        handleEmployeeData(employeesData);
         setLoading(false);
       } else {
         setTimeout(async () => {
@@ -27,25 +33,18 @@ export const useEmployees = (id?: string) => {
             const { employees } = await import("../../public/employees.json");
             const employeesData = employees as Employee[];
 
-            if (id) {
-              const foundEmployee = employeesData.find((emp) => emp.id === id);
-              setEmployee(foundEmployee || null);
-            } else {
-              setEmployees(employeesData);
-            }
+            handleEmployeeData(employeesData);
 
             localStorage.setItem("employees", JSON.stringify(employeesData));
-            setLoading(false);
           } catch (error) {
             console.error(error);
             setError("Error fetching employees");
+          } finally {
             setLoading(false);
           }
         }, 1000);
       }
-    };
-
-    loadEmployees();
+    })();
   }, [id]);
 
   const updateEmployee = (id: string, updatedData: Partial<Employee>) =>
