@@ -1,4 +1,4 @@
-import { Box, Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, Chip, ChipProps, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { FC, memo } from "react";
 import Image from "next/image";
@@ -12,7 +12,7 @@ const CARD_SX = {
   borderRadius: 2,
   transition: "transform 120ms ease, box-shadow 120ms ease",
   "&:hover": { transform: "translateY(-2px)", boxShadow: 4 },
-};
+} as const;
 
 const IMAGE_BOX_SX = {
   position: "relative",
@@ -22,9 +22,9 @@ const IMAGE_BOX_SX = {
   borderTopLeftRadius: 8,
   borderTopRightRadius: 8,
   overflow: "hidden",
-};
+} as const;
 
-const statusColor = (status: string): "success" | "error" | "default" => {
+const statusColor = (status: string): ChipProps["color"] => {
   switch (status?.toLowerCase()) {
     case "active":
       return "success";
@@ -45,23 +45,24 @@ const EmployeeCard: FC<EmployeeCardProps> = ({ employee }) => {
   const handleClick = () => router.push(`/team/${employee.id}`);
 
   return (
-    <Card variant="outlined" sx={CARD_SX}>
-      <CardActionArea onClick={handleClick} sx={{ height: "100%", alignItems: "stretch" }}>
+    <Card variant="outlined" sx={CARD_SX} role="listitem">
+      <CardActionArea onClick={handleClick} sx={{ height: "100%", alignItems: "stretch" }} aria-label={`Open profile of ${employee.name}`} aria-labelledby={`employee-title-${employee.id}`} aria-describedby={`employee-desc-${employee.id}`}>
         <Box sx={IMAGE_BOX_SX}>
-          <Image src={employee.avatarUrl} alt={employee.name} fill sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 25vw" priority />
+          <Image src={employee.avatarUrl} alt={`${employee.name} profile photo`} fill sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 25vw" priority />
         </Box>
 
         <CardContent sx={{ display: "flex", flexDirection: "column", gap: 0.5, flexGrow: 1 }}>
-          <Typography variant="h6" component="h2" sx={{ fontSize: { xs: 16, md: 18 } }} noWrap>
+          <Typography id={`employee-title-${employee.id}`} variant="h6" component="h3" sx={{ fontSize: { xs: 16, md: 18 } }} noWrap>
             {employee.name}
           </Typography>
-          <Typography variant="body2" color="text.secondary" noWrap>
+
+          <Typography id={`employee-desc-${employee.id}`} variant="body2" color="text.secondary" noWrap>
             {employee.role}
           </Typography>
 
           <Stack direction="row" spacing={1} alignItems="center" mt="auto">
-            <Chip size="small" label={employee.department} />
-            <Chip size="small" label={employee.status} color={statusColor(employee.status)} variant="filled" />
+            <Chip size="small" label={employee.department} aria-label={`Department: ${employee.department}`} />
+            <Chip size="small" label={employee.status} color={statusColor(employee.status)} variant="filled" aria-label={`Status: ${employee.status}`} />
           </Stack>
         </CardContent>
       </CardActionArea>

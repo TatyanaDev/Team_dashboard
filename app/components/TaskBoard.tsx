@@ -57,6 +57,7 @@ const TaskBoard = () => {
         // No status change, don't show notification
         return;
       }
+
       // Optimistically update the task status in local state (UI)
       const updatedTasks = optimisticTasks.map((task) => (task.id === movedTask.id ? { ...task, status: over.id as TaskStatus } : task));
       setOptimisticTasks(updatedTasks);
@@ -82,16 +83,20 @@ const TaskBoard = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h6">Loading...</Typography>
+      <Container component="main" maxWidth="lg" sx={{ py: 4 }}>
+        <Typography component="p" role="status" aria-live="polite">
+          Loading...
+        </Typography>
       </Container>
     );
   }
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography color="error">{error}</Typography>
+      <Container component="main" maxWidth="lg" sx={{ py: 4 }}>
+        <Typography component="p" role="alert" aria-live="assertive" color="error">
+          {error}
+        </Typography>
       </Container>
     );
   }
@@ -99,7 +104,7 @@ const TaskBoard = () => {
   const columns: TaskStatus[] = ["To Do", "In Progress", "Done"];
 
   return (
-    <Box>
+    <Box component="section" aria-label="Task board with draggable tasks">
       <DndContext onDragEnd={handleDragEnd}>
         <Grid
           container
@@ -114,7 +119,7 @@ const TaskBoard = () => {
           }}
         >
           {columns.map((status) => (
-            <Grid key={status}>
+            <Grid key={status} component="section" aria-labelledby={`task-column-${status.replace(/\s+/g, "-").toLowerCase()}`}>
               <Paper
                 elevation={2}
                 sx={{
@@ -125,10 +130,11 @@ const TaskBoard = () => {
                   minHeight: { xs: 320, md: 360 },
                 }}
               >
-                <Typography variant="h6" sx={{ fontSize: { xs: 16, md: 18 }, fontWeight: 700 }}>
+                <Typography id={`task-column-${status.replace(/\s+/g, "-").toLowerCase()}`} component="h2" variant="h6" sx={{ fontSize: { xs: 16, md: 18 }, fontWeight: 700 }}>
                   {status}
                 </Typography>
-                <Box sx={{ mt: 1.5, flex: 1, display: "flex" }}>
+
+                <Box sx={{ mt: 1.5, flex: 1, display: "flex" }} role="list" aria-label={`${status} tasks`}>
                   <Droppable status={status} tasks={optimisticTasks} />
                 </Box>
               </Paper>

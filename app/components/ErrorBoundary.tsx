@@ -1,4 +1,4 @@
-import { Box, Typography, Alert } from "@mui/material";
+import { Box, Typography, Alert, AlertTitle } from "@mui/material";
 import { Component, ReactNode } from "react";
 
 interface ErrorBoundaryProps {
@@ -25,11 +25,9 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 
       return (
         <Box sx={{ p: 3 }}>
-          <Alert severity="error">
-            <Typography variant="h6" gutterBottom>
-              Something went wrong
-            </Typography>
-            Please try refreshing the page.
+          <Alert severity="error" role="alert" aria-live="assertive" aria-atomic>
+            <AlertTitle>Something went wrong</AlertTitle>
+            <Typography component="p">Please try refreshing the page.</Typography>
           </Alert>
         </Box>
       );

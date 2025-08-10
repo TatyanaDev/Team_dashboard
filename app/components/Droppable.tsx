@@ -16,6 +16,8 @@ const Droppable: FC<DroppableProps> = ({ status, tasks }) => {
   return (
     <Box
       ref={setNodeRef}
+      role="list"
+      aria-label={isOver ? `Release to move task to ${status}` : `${status} tasks list`}
       sx={{
         flex: 1,
         width: "100%",
@@ -30,7 +32,7 @@ const Droppable: FC<DroppableProps> = ({ status, tasks }) => {
       }}
     >
       {filteredTasks.length === 0 ? (
-        <Box sx={{ m: "auto", textAlign: "center", color: "text.disabled", userSelect: "none" }}>
+        <Box sx={{ m: "auto", textAlign: "center", color: "text.disabled", userSelect: "none" }} aria-label={`No tasks in ${status}. You can drop tasks here.`}>
           <Typography variant="body2">No tasks</Typography>
         </Box>
       ) : (

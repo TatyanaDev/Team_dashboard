@@ -14,14 +14,7 @@ const ConfirmationDialog: FC<ConfirmationDialogProps> = ({ open, onClose, onConf
   const descId = "confirmation-dialog-description";
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby={titleId}
-      aria-describedby={descId}
-      fullWidth
-      maxWidth="xs"
-    >
+    <Dialog open={open} onClose={onClose} role="dialog" aria-modal={true} aria-labelledby={titleId} aria-describedby={descId} fullWidth maxWidth="xs">
       <DialogTitle id={titleId} sx={{ fontSize: { xs: 18, md: 20 }, fontWeight: 600 }}>
         {title}
       </DialogTitle>
@@ -32,10 +25,10 @@ const ConfirmationDialog: FC<ConfirmationDialogProps> = ({ open, onClose, onConf
 
       <DialogActions sx={{ px: { xs: 2, md: 3 }, pb: { xs: 2, md: 3 } }}>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ width: "100%" }}>
-          <Button onClick={onClose} color="secondary" variant="text" sx={{ flex: 1 }}>
+          <Button onClick={onClose} color="secondary" variant="text" sx={{ flex: 1 }} aria-label="Cancel and close dialog">
             Cancel
           </Button>
-          <Button onClick={onConfirm} color="primary" variant="contained" autoFocus sx={{ flex: 1 }}>
+          <Button onClick={onConfirm} color="primary" variant="contained" autoFocus sx={{ flex: 1 }} aria-label={`Confirm: ${title}`}>
             Confirm
           </Button>
         </Stack>

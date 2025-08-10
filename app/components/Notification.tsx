@@ -1,4 +1,5 @@
-import { Snackbar, Alert, SnackbarCloseReason } from "@mui/material";
+import type { SnackbarCloseReason } from "@mui/material/Snackbar";
+import { Snackbar, Alert } from "@mui/material";
 import { FC, memo } from "react";
 import type { NotificationData } from "../types/types";
 
@@ -29,8 +30,27 @@ const Notification: FC<NotificationProps> = ({ notification, closeNotification }
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={2000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} key={message}>
-      <Alert onClose={closeNotification} severity={severity} variant="filled" role={role} aria-live={ariaLive}>
+    <Snackbar
+      open={open}
+      autoHideDuration={2000}
+      onClose={handleSnackbarClose}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      key={message}
+      sx={{
+        "& .MuiPaper-root": { width: { xs: "calc(100vw - 32px)", sm: "auto" } },
+        bottom: { xs: 12, sm: 24 },
+        right: { xs: 12, sm: 24 },
+      }}
+    >
+      <Alert
+        onClose={closeNotification}
+        severity={severity}
+        variant="filled"
+        role={role}
+        aria-live={ariaLive}
+        aria-atomic // read the whole message when it changes
+        closeText="Close notification"
+      >
         {message}
       </Alert>
     </Snackbar>
