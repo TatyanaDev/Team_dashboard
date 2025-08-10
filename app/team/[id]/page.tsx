@@ -5,9 +5,8 @@ import { useState, memo, useCallback, useEffect } from "react";
 import { useParams } from "next/navigation";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import EmployeeTabPanels from "../../components/EmployeeTabPanels";
-import LoadingMessage from "../../components/LoadingMessage";
+import StatusMessage from "../../components/StatusMessage";
 import ErrorBoundary from "../../components/ErrorBoundary";
-import ErrorMessage from "../../components/ErrorMessage";
 import { useEmployees } from "../../hooks/useEmployees";
 import type { TabKey } from "../../types/types";
 
@@ -54,11 +53,11 @@ const EmployeeProfilePage = () => {
   }
 
   if (loading) {
-    return <LoadingMessage />;
+    return <StatusMessage type="loading" message="Loading..." />;
   }
 
   if (error) {
-    return <ErrorMessage message={error} />;
+    return <StatusMessage type="error" message={error} />;
   }
 
   return (

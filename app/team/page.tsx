@@ -3,10 +3,9 @@
 import { Box, Button, Chip, Container, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
 import { ChangeEvent, memo, useCallback, useMemo, useState } from "react";
 import { generateCSV } from "../services/csvExportService";
-import LoadingMessage from "../components/LoadingMessage";
+import StatusMessage from "../components/StatusMessage";
 import ErrorBoundary from "../components/ErrorBoundary";
 import type { FilteredEmployee } from "../types/types";
-import ErrorMessage from "../components/ErrorMessage";
 import EmployeeCard from "../components/EmployeeCard";
 import { useEmployees } from "../hooks/useEmployees";
 
@@ -34,11 +33,11 @@ const TeamPage = () => {
   );
 
   if (loading) {
-    return <LoadingMessage />;
+    return <StatusMessage type="loading" message="Loading..." />;
   }
 
   if (error) {
-    return <ErrorMessage message={error} />;
+    return <StatusMessage type="error" message={error} />;
   }
 
   const handleExportClick = () => {

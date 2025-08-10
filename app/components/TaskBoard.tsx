@@ -3,9 +3,8 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import type { NotificationData, Task, TaskStatus } from "../types/types";
 import { Box, Paper, Typography, Grid } from "@mui/material";
 import { updateTaskOnServer } from "../services/taskService";
-import LoadingMessage from "./LoadingMessage";
 import { useTasks } from "../hooks/useTasks";
-import ErrorMessage from "./ErrorMessage";
+import StatusMessage from "./StatusMessage";
 import Notification from "./Notification";
 import Droppable from "./Droppable";
 
@@ -84,11 +83,11 @@ const TaskBoard = () => {
   );
 
   if (loading) {
-    return <LoadingMessage />;
+    return <StatusMessage type="loading" message="Loading..." />;
   }
 
   if (error) {
-    return <ErrorMessage message={error} />;
+    return <StatusMessage type="error" message={error} />;
   }
 
   const columns: TaskStatus[] = ["To Do", "In Progress", "Done"];
