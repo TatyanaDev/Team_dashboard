@@ -2,6 +2,7 @@
 
 import { ChangeEvent, memo, useCallback, useMemo, useState } from "react";
 import { generateCSV } from "../services/csvExportService";
+import ErrorBoundary from "../components/ErrorBoundary";
 import type { FilteredEmployee } from "../types/types";
 import EmployeeCard from "../components/EmployeeCard";
 import { useEmployees } from "../hooks/useEmployees";
@@ -42,27 +43,29 @@ const TeamPage = () => {
   };
 
   return (
-    <div>
-      <input type="text" placeholder="Search by name" value={searchTerm} onChange={handleSearchChange} />
-      <select onChange={handleDepartmentChange}>
-        <option value="All">All</option>
-        <option value="Sales">Sales</option>
-        <option value="Technical">Technical</option>
-        <option value="Finance">Finance</option>
-      </select>
+    <ErrorBoundary fallback={<div>Something went wrong while loading the team.</div>}>
+      <div>
+        <input type="text" placeholder="Search by name" value={searchTerm} onChange={handleSearchChange} />
+        <select onChange={handleDepartmentChange}>
+          <option value="All">All</option>
+          <option value="Sales">Sales</option>
+          <option value="Technical">Technical</option>
+          <option value="Finance">Finance</option>
+        </select>
 
-      <button onClick={handleExportClick}>Export to CSV</button>
+        <button onClick={handleExportClick}>Export to CSV</button>
 
-      {filteredEmployees.length === 0 ? (
-        <div>No employees found</div>
-      ) : (
-        <div>
-          {filteredEmployees.map((employee) => (
-            <EmployeeCard key={employee.id} employee={employee} />
-          ))}
-        </div>
-      )}
-    </div>
+        {filteredEmployees.length === 0 ? (
+          <div>No employees found</div>
+        ) : (
+          <div>
+            {filteredEmployees.map((employee) => (
+              <EmployeeCard key={employee.id} employee={employee} />
+            ))}
+          </div>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 };
 

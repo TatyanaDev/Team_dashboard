@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, memo, useMemo, useCallback, useEffect } from "react";
+import { useState, memo, useMemo, useCallback, useEffect, ReactElement } from "react";
 import { useParams } from "next/navigation";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
+import ErrorBoundary from "../../components/ErrorBoundary";
 import { useEmployees } from "../../hooks/useEmployees";
 import TaskBoard from "../../components/TaskBoard";
 
@@ -43,6 +44,10 @@ const EmployeeProfilePage = () => {
       return <div>Employee not found</div>;
     }
 
+    function Bomb(): ReactElement {
+      throw new Error("Test error in child component");
+    }
+
     switch (tab) {
       case "info":
         return (
@@ -76,7 +81,11 @@ const EmployeeProfilePage = () => {
         return (
           <div>
             <h2>Tasks</h2>
-            <TaskBoard />
+            {/* Uncomment the <Bomb /> component below to test the ErrorBoundary fallback UI. */}
+            <ErrorBoundary fallback={<div>Something went wrong while loading the task board</div>}>
+              {/* <Bomb /> */}
+              <TaskBoard />
+            </ErrorBoundary>
           </div>
         );
       default:
@@ -93,18 +102,20 @@ const EmployeeProfilePage = () => {
   }
 
   return (
-    <div>
-      <h1>{employee?.name}&apos;s Profile</h1>
-
+    <ErrorBoundary fallback={<div>Something went wrong while loading the employee profile.</div>}>
       <div>
-        <button onClick={() => setTab("info")}>Personal Info</button>
-        <button onClick={() => setTab("tasks")}>Tasks</button>
+        <h1>{employee?.name}&apos;s Profile</h1>
+
+        <div>
+          <button onClick={() => setTab("info")}>Personal Info</button>
+          <button onClick={() => setTab("tasks")}>Tasks</button>
+        </div>
+
+        {tabContent}
+
+        <ConfirmationDialog open={openDialog} onClose={() => setOpenDialog(false)} onConfirm={handleConfirmSave} title="Confirm Changes" message="Are you sure you want to save these changes?" />
       </div>
-
-      {tabContent}
-
-      <ConfirmationDialog open={openDialog} onClose={() => setOpenDialog(false)} onConfirm={handleConfirmSave} title="Confirm Changes" message="Are you sure you want to save these changes?" />
-    </div>
+    </ErrorBoundary>
   );
 };
 
