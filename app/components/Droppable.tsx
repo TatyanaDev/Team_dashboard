@@ -1,27 +1,46 @@
-import { FC, memo, useMemo } from "react";
+import { Box, Stack, Typography } from "@mui/material";
 import { useDroppable } from "@dnd-kit/core";
-import type { Task } from "../types/types";
+import { FC, memo, useMemo } from "react";
+import type { Task, TaskStatus } from "../types/types";
 import Draggable from "./Draggable";
 
 interface DroppableProps {
-  status: string;
+  status: TaskStatus;
   tasks: Task[];
 }
 
 const Droppable: FC<DroppableProps> = ({ status, tasks }) => {
-  const { setNodeRef } = useDroppable({ id: status });
-
+  const { setNodeRef, isOver } = useDroppable({ id: status });
   const filteredTasks = useMemo(() => tasks.filter((task) => task.status === status), [status, tasks]);
 
   return (
-    <div ref={setNodeRef} style={{ margin: "0 10px", flex: 1 }}>
-      <h3>{status}</h3>
-      <div style={{ border: "1px solid #cccccc", padding: "10px" }}>
-        {filteredTasks.map((task) => (
-          <Draggable key={task.id} task={task} />
-        ))}
-      </div>
-    </div>
+    <Box
+      ref={setNodeRef}
+      sx={{
+        flex: 1,
+        width: "100%",
+        minHeight: { xs: 240, md: 280 },
+        borderRadius: 1,
+        border: "1px dashed",
+        borderColor: isOver ? "primary.main" : "divider",
+        bgcolor: isOver ? "action.hover" : "transparent",
+        transition: "border-color 120ms ease, background-color 120ms ease",
+        p: 1.5,
+        display: "flex",
+      }}
+    >
+      {filteredTasks.length === 0 ? (
+        <Box sx={{ m: "auto", textAlign: "center", color: "text.disabled", userSelect: "none" }}>
+          <Typography variant="body2">No tasks</Typography>
+        </Box>
+      ) : (
+        <Stack spacing={1} sx={{ width: "100%" }}>
+          {filteredTasks.map((task) => (
+            <Draggable key={task.id} task={task} />
+          ))}
+        </Stack>
+      )}
+    </Box>
   );
 };
 

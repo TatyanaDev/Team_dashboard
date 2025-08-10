@@ -1,5 +1,6 @@
 "use client";
 
+import { Box, Button, Chip, Container, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
 import { ChangeEvent, memo, useCallback, useMemo, useState } from "react";
 import { generateCSV } from "../services/csvExportService";
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -16,7 +17,7 @@ const TeamPage = () => {
     setSearchTerm(event.target.value);
   }, []);
 
-  const handleDepartmentChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+  const handleDepartmentChange = useCallback((event: SelectChangeEvent) => {
     setSelectedDepartment(event.target.value);
   }, []);
 
@@ -29,11 +30,19 @@ const TeamPage = () => {
   }, [employees, searchTerm, selectedDepartment]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h6">Loading...</Typography>
+      </Container>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography color="error">{error}</Typography>
+      </Container>
+    );
   }
 
   const handleExportClick = () => {
@@ -43,28 +52,75 @@ const TeamPage = () => {
   };
 
   return (
-    <ErrorBoundary fallback={<div>Something went wrong while loading the team.</div>}>
-      <div>
-        <input type="text" placeholder="Search by name" value={searchTerm} onChange={handleSearchChange} />
-        <select onChange={handleDepartmentChange}>
-          <option value="All">All</option>
-          <option value="Sales">Sales</option>
-          <option value="Technical">Technical</option>
-          <option value="Finance">Finance</option>
-        </select>
+    <ErrorBoundary fallback={<Typography color="error">Something went wrong while loading the team.</Typography>}>
+      <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
+        <Stack direction={{ xs: "column", md: "row" }} alignItems={{ xs: "stretch", md: "center" }} justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+          <Box>
+            <Typography variant="h4" fontWeight={700} sx={{ fontSize: { xs: 24, md: 32 } }}>
+              Team
+            </Typography>
+            <Stack direction="row" spacing={1} mt={1}>
+              <Chip label={`Total: ${employees.length}`} size="small" />
+              <Chip color="primary" label={`Found: ${filteredEmployees.length}`} size="small" />
+            </Stack>
+          </Box>
 
-        <button onClick={handleExportClick}>Export to CSV</button>
+          <Button variant="contained" color="primary" onClick={handleExportClick} sx={{ alignSelf: { xs: "stretch", md: "auto" } }}>
+            Export CSV
+          </Button>
+        </Stack>
+
+        <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 3 }}>
+          <TextField fullWidth variant="outlined" placeholder="Search by name" value={searchTerm} onChange={handleSearchChange} />
+          <FormControl fullWidth>
+            <InputLabel id="department-label">Department</InputLabel>
+            <Select labelId="department-label" label="Department" value={selectedDepartment} onChange={handleDepartmentChange}>
+              <MenuItem value="All">All</MenuItem>
+              <MenuItem value="Sales">Sales</MenuItem>
+              <MenuItem value="Technical">Technical</MenuItem>
+              <MenuItem value="Finance">Finance</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
 
         {filteredEmployees.length === 0 ? (
-          <div>No employees found</div>
+          <Box
+            sx={{
+              py: 8,
+              textAlign: "center",
+              bgcolor: "background.paper",
+              borderRadius: 2,
+              border: "1px dashed",
+              borderColor: "divider",
+            }}
+          >
+            <Typography variant="h6" color="text.secondary">
+              No employees found
+            </Typography>
+            <Typography variant="body2" color="text.secondary" mt={1}>
+              Try adjusting the search criteria or department filter
+            </Typography>
+          </Box>
         ) : (
-          <div>
+          <Box
+            sx={{
+              display: "grid",
+              gap: 2,
+              gridTemplateColumns: {
+                xs: "repeat(1, 1fr)",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+                lg: "repeat(4, 1fr)",
+              },
+              alignItems: "stretch",
+            }}
+          >
             {filteredEmployees.map((employee) => (
               <EmployeeCard key={employee.id} employee={employee} />
             ))}
-          </div>
+          </Box>
         )}
-      </div>
+      </Container>
     </ErrorBoundary>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { Box, Button, Container, Stack, Tab, Tabs, TextField, Typography, Paper } from "@mui/material";
 import { useState, memo, useMemo, useCallback, useEffect, ReactElement, Suspense, lazy } from "react";
 import { useParams } from "next/navigation";
 const TaskBoard = lazy(() => import("../../components/TaskBoard"));
@@ -41,7 +42,11 @@ const EmployeeProfilePage = () => {
 
   const tabContent = useMemo(() => {
     if (!employee) {
-      return <div>Employee not found</div>;
+      return (
+        <Typography variant="body1" color="text.secondary">
+          Employee not found
+        </Typography>
+      );
     }
 
     function Bomb(): ReactElement {
@@ -51,44 +56,52 @@ const EmployeeProfilePage = () => {
     switch (tab) {
       case "info":
         return (
-          <div>
-            <h2>Personal Information</h2>
+          <Paper sx={{ p: { xs: 2, md: 3 } }}>
+            <Typography variant="h6" gutterBottom>
+              Personal Information
+            </Typography>
             {!isEditing ? (
-              <div>
-                <p>Role: {employee.role}</p>
-                <p>Department: {employee.department}</p>
-                <p>Phone: {employee.phone}</p>
-                <p>Telegram: {employee.telegram}</p>
-                <button onClick={() => setIsEditing(true)}>Edit</button>
-              </div>
+              <Stack spacing={1.5}>
+                <Typography>Role: {employee.role}</Typography>
+                <Typography>Department: {employee.department}</Typography>
+                <Typography>Phone: {employee.phone || "—"}</Typography>
+                <Typography>Telegram: {employee.telegram || "—"}</Typography>
+                <Box>
+                  <Button variant="contained" onClick={() => setIsEditing(true)}>
+                    Edit
+                  </Button>
+                </Box>
+              </Stack>
             ) : (
-              <div>
-                <div>
-                  <label>Phone:</label>
-                  <input type="text" value={phone} onChange={({ target }) => setPhone(target.value)} />
-                </div>
-                <div>
-                  <label>Telegram:</label>
-                  <input type="text" value={telegram} onChange={({ target }) => setTelegram(target.value)} />
-                </div>
-                <button onClick={handleSaveChanges}>Save Changes</button>
-                <button onClick={handleCancelChanges}>Cancel</button>
-              </div>
+              <Stack spacing={2} maxWidth={400}>
+                <TextField label="Phone" value={phone} onChange={({ target }) => setPhone(target.value)} fullWidth />
+                <TextField label="Telegram" value={telegram} onChange={({ target }) => setTelegram(target.value)} fullWidth />
+                <Stack direction="row" spacing={2}>
+                  <Button variant="contained" onClick={handleSaveChanges}>
+                    Save Changes
+                  </Button>
+                  <Button variant="outlined" onClick={handleCancelChanges}>
+                    Cancel
+                  </Button>
+                </Stack>
+              </Stack>
             )}
-          </div>
+          </Paper>
         );
       case "tasks":
         return (
-          <div>
-            <h2>Tasks</h2>
+          <Paper sx={{ p: { xs: 2, md: 3 } }}>
+            <Typography variant="h6" gutterBottom>
+              Tasks
+            </Typography>
             {/* Uncomment the <Bomb /> component below to test the ErrorBoundary fallback UI. */}
-            <ErrorBoundary fallback={<div>Something went wrong while loading the task board</div>}>
-              <Suspense fallback={<div>Loading task board...</div>}>
+            <ErrorBoundary fallback={<Typography color="error">Something went wrong while loading the task board</Typography>}>
+              <Suspense fallback={<Typography>Loading task board...</Typography>}>
                 {/* <Bomb /> */}
                 <TaskBoard />
               </Suspense>
             </ErrorBoundary>
-          </div>
+          </Paper>
         );
       default:
         return null;
@@ -96,27 +109,39 @@ const EmployeeProfilePage = () => {
   }, [tab, employee, isEditing, phone, telegram, handleSaveChanges, handleCancelChanges]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography>Loading...</Typography>
+      </Container>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography color="error">{error}</Typography>
+      </Container>
+    );
   }
 
   return (
-    <ErrorBoundary fallback={<div>Something went wrong while loading the employee profile.</div>}>
-      <div>
-        <h1>{employee?.name}&apos;s Profile</h1>
+    <ErrorBoundary fallback={<Typography color="error">Something went wrong while loading the employee profile.</Typography>}>
+      <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 } }}>
+        <Stack spacing={2} sx={{ mb: 3 }}>
+          <Typography variant="h4" fontWeight={700} sx={{ fontSize: { xs: 24, md: 32 } }}>
+            {employee?.name}&apos;s Profile
+          </Typography>
 
-        <div>
-          <button onClick={() => setTab("info")}>Personal Info</button>
-          <button onClick={() => setTab("tasks")}>Tasks</button>
-        </div>
+          <Tabs value={tab} onChange={(_, value) => setTab(value)} variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile>
+            <Tab label="Personal Info" value="info" />
+            <Tab label="Tasks" value="tasks" />
+          </Tabs>
+        </Stack>
 
         {tabContent}
 
         <ConfirmationDialog open={openDialog} onClose={() => setOpenDialog(false)} onConfirm={handleConfirmSave} title="Confirm Changes" message="Are you sure you want to save these changes?" />
-      </div>
+      </Container>
     </ErrorBoundary>
   );
 };

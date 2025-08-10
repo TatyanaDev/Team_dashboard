@@ -1,6 +1,7 @@
 import { useState, useEffect, memo, useCallback } from "react";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import type { NotificationData, Task, TaskStatus } from "../types/types";
+import { Box, Paper, Typography, Grid, Container } from "@mui/material";
 import { updateTaskOnServer } from "../services/taskService";
 import { useTasks } from "../hooks/useTasks";
 import Notification from "./Notification";
@@ -42,62 +43,102 @@ const TaskBoard = () => {
     async (event: DragEndEvent) => {
       const { active, over } = event;
 
-      if (over && active.id !== over.id) {
-        const movedTask = tasks.find((task) => task.id === active.id);
-        if (!movedTask) {
-          return;
-        }
+      if (!over || active.id === over.id) {
+        return;
+      }
 
-        const newStatus = over.id;
-        if (movedTask.status === newStatus) {
-          // No status change, don't show notification
-          return;
-        }
+      const movedTask = tasks.find((task) => task.id === active.id);
+      if (!movedTask) {
+        return;
+      }
 
-        // Optimistically update the task status in local state (UI)
-        const updatedTasks = optimisticTasks.map((task) => (task.id === movedTask.id ? { ...task, status: over.id as TaskStatus } : task));
-        setOptimisticTasks(updatedTasks);
+      const newStatus = over.id;
+      if (movedTask.status === newStatus) {
+        // No status change, don't show notification
+        return;
+      }
+      // Optimistically update the task status in local state (UI)
+      const updatedTasks = optimisticTasks.map((task) => (task.id === movedTask.id ? { ...task, status: over.id as TaskStatus } : task));
+      setOptimisticTasks(updatedTasks);
 
-        try {
-          // For task with ID "1", simulate the optimistic UI update and then send the request to the server
-          if (movedTask.id === "1") {
-            await updateTaskOnServer(movedTask.id, over.id as TaskStatus);
-            showNotification(`Task "${movedTask.title}" moved to ${over.id}`, "success");
-          } else {
-            // For all other tasks, update the global state
-            setTasks((prevTasks) => prevTasks.map((task) => (task.id === active.id ? { ...task, status: over.id as TaskStatus } : task)));
-            showNotification(`Task "${movedTask.title}" moved to ${over.id}`, "success");
-          }
-        } catch (error) {
-          // In case of an error, revert the changes made optimistically
-          setOptimisticTasks(tasks);
-          showNotification(`Failed to move task "${movedTask.title}" ${error}`, "error");
+      try {
+        // For task with ID "1", simulate the optimistic UI update and then send the request to the server
+        if (movedTask.id === "1") {
+          await updateTaskOnServer(movedTask.id, over.id as TaskStatus);
+          showNotification(`Task "${movedTask.title}" moved to ${over.id}`, "success");
+        } else {
+          // For all other tasks, update the global state
+          setTasks((prevTasks) => prevTasks.map((task) => (task.id === active.id ? { ...task, status: over.id as TaskStatus } : task)));
+          showNotification(`Task "${movedTask.title}" moved to ${over.id}`, "success");
         }
+      } catch (error) {
+        // In case of an error, revert the changes made optimistically
+        setOptimisticTasks(tasks);
+        showNotification(`Failed to move task "${movedTask.title}" ${error}`, "error");
       }
     },
-    [tasks, optimisticTasks, showNotification, setTasks, setOptimisticTasks]
+    [tasks, optimisticTasks, setTasks, showNotification]
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h6">Loading...</Typography>
+      </Container>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography color="error">{error}</Typography>
+      </Container>
+    );
   }
 
+  const columns: TaskStatus[] = ["To Do", "In Progress", "Done"];
+
   return (
-    <div>
+    <Box>
       <DndContext onDragEnd={handleDragEnd}>
-        <div style={{ display: "flex" }}>
-          {["To Do", "In Progress", "Done"].map((status) => (
-            <Droppable key={status} status={status} tasks={optimisticTasks} />
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+              md: "1fr 1fr 1fr",
+            },
+          }}
+        >
+          {columns.map((status) => (
+            <Grid key={status}>
+              <Paper
+                elevation={2}
+                sx={{
+                  p: 2,
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  minHeight: { xs: 320, md: 360 },
+                }}
+              >
+                <Typography variant="h6" sx={{ fontSize: { xs: 16, md: 18 }, fontWeight: 700 }}>
+                  {status}
+                </Typography>
+                <Box sx={{ mt: 1.5, flex: 1, display: "flex" }}>
+                  <Droppable status={status} tasks={optimisticTasks} />
+                </Box>
+              </Paper>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       </DndContext>
 
       <Notification notification={notification} closeNotification={closeNotification} />
-    </div>
+    </Box>
   );
 };
 
