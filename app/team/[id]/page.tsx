@@ -1,14 +1,15 @@
 "use client";
 
-import { Box, Button, Container, Stack, Tab, Tabs, TextField, Typography, Paper } from "@mui/material";
-import { useState, memo, useCallback, useEffect, ReactElement, Suspense, lazy } from "react";
+import { Container, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { useState, memo, useCallback, useEffect } from "react";
 import { useParams } from "next/navigation";
-const TaskBoard = lazy(() => import("../../components/TaskBoard"));
 import ConfirmationDialog from "../../components/ConfirmationDialog";
+import EmployeeTabPanels from "../../components/EmployeeTabPanels";
+import LoadingMessage from "../../components/LoadingMessage";
 import ErrorBoundary from "../../components/ErrorBoundary";
+import ErrorMessage from "../../components/ErrorMessage";
 import { useEmployees } from "../../hooks/useEmployees";
-
-type TabKey = "info" | "tasks";
+import type { TabKey } from "../../types/types";
 
 const EmployeeProfilePage = () => {
   const { id } = useParams();
@@ -52,98 +53,12 @@ const EmployeeProfilePage = () => {
     );
   }
 
-  function Bomb(): ReactElement {
-    throw new Error("Test error in child component");
-  }
-
-  const tabContent = (() => {
-    if (tab === "info") {
-      return (
-        <Box id="employee-tabpanel-info" role="tabpanel" aria-labelledby="employee-tab-info" hidden={tab !== "info"} sx={{ display: tab === "info" ? "block" : "none" }}>
-          <Paper sx={{ p: { xs: 2, md: 3 } }}>
-            <Typography component="h2" variant="h6" gutterBottom>
-              Personal Information
-            </Typography>
-
-            {!isEditing ? (
-              <Stack spacing={1.5} component="section" aria-label="Employee personal details">
-                <Typography>Role: {employee.role}</Typography>
-                <Typography>Department: {employee.department}</Typography>
-                <Typography>Phone: {employee.phone || "—"}</Typography>
-                <Typography>Telegram: {employee.telegram || "—"}</Typography>
-                <Box>
-                  <Button variant="contained" onClick={() => setIsEditing(true)} aria-label="Edit personal information">
-                    Edit
-                  </Button>
-                </Box>
-              </Stack>
-            ) : (
-              <Stack spacing={2} maxWidth={400} component="form" aria-label="Edit personal information form">
-                <TextField label="Phone" value={phone} onChange={({ target }) => setPhone(target.value)} fullWidth />
-                <TextField label="Telegram" value={telegram} onChange={({ target }) => setTelegram(target.value)} fullWidth />
-                <Stack direction="row" spacing={2}>
-                  <Button variant="contained" onClick={handleSaveChanges} aria-label="Save changes">
-                    Save Changes
-                  </Button>
-                  <Button variant="outlined" onClick={handleCancelChanges} aria-label="Cancel changes">
-                    Cancel
-                  </Button>
-                </Stack>
-              </Stack>
-            )}
-          </Paper>
-        </Box>
-      );
-    }
-
-    return (
-      <Box id="employee-tabpanel-tasks" role="tabpanel" aria-labelledby="employee-tab-tasks" hidden={tab !== "tasks"} sx={{ display: tab === "tasks" ? "block" : "none" }}>
-        <Paper sx={{ p: { xs: 2, md: 3 } }}>
-          <Typography component="h2" variant="h6" gutterBottom>
-            Tasks
-          </Typography>
-          <ErrorBoundary
-            fallback={
-              <Typography component="p" role="alert" aria-live="assertive" color="error">
-                Something went wrong while loading the task board
-              </Typography>
-            }
-          >
-            <Suspense
-              fallback={
-                <Typography role="status" aria-live="polite">
-                  Loading task board...
-                </Typography>
-              }
-            >
-              {/* Uncomment the <Bomb /> component below to test the ErrorBoundary fallback UI. */}
-              {/* <Bomb /> */}
-              <TaskBoard />
-            </Suspense>
-          </ErrorBoundary>
-        </Paper>
-      </Box>
-    );
-  })();
-
   if (loading) {
-    return (
-      <Container component="main" maxWidth="lg" sx={{ py: 4 }}>
-        <Typography component="p" role="status" aria-live="polite">
-          Loading...
-        </Typography>
-      </Container>
-    );
+    return <LoadingMessage />;
   }
 
   if (error) {
-    return (
-      <Container component="main" maxWidth="lg" sx={{ py: 4 }}>
-        <Typography component="p" role="alert" aria-live="assertive" color="error">
-          {error}
-        </Typography>
-      </Container>
-    );
+    return <ErrorMessage message={error} />;
   }
 
   return (
@@ -166,7 +81,7 @@ const EmployeeProfilePage = () => {
           </Tabs>
         </Stack>
 
-        {tabContent}
+        <EmployeeTabPanels tab={tab} employee={employee} isEditing={isEditing} phone={phone} telegram={telegram} onEditToggle={setIsEditing} onPhoneChange={setPhone} onTelegramChange={setTelegram} onSave={handleSaveChanges} onCancel={handleCancelChanges} />
 
         <ConfirmationDialog open={openDialog} onClose={() => setOpenDialog(false)} onConfirm={handleConfirmSave} title="Confirm Changes" message="Are you sure you want to save these changes?" />
       </Container>

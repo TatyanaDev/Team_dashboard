@@ -1,9 +1,11 @@
 import { useState, useEffect, memo, useCallback } from "react";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import type { NotificationData, Task, TaskStatus } from "../types/types";
-import { Box, Paper, Typography, Grid, Container } from "@mui/material";
+import { Box, Paper, Typography, Grid } from "@mui/material";
 import { updateTaskOnServer } from "../services/taskService";
+import LoadingMessage from "./LoadingMessage";
 import { useTasks } from "../hooks/useTasks";
+import ErrorMessage from "./ErrorMessage";
 import Notification from "./Notification";
 import Droppable from "./Droppable";
 
@@ -82,23 +84,11 @@ const TaskBoard = () => {
   );
 
   if (loading) {
-    return (
-      <Container component="main" maxWidth="lg" sx={{ py: 4 }}>
-        <Typography component="p" role="status" aria-live="polite">
-          Loading...
-        </Typography>
-      </Container>
-    );
+    return <LoadingMessage />;
   }
 
   if (error) {
-    return (
-      <Container component="main" maxWidth="lg" sx={{ py: 4 }}>
-        <Typography component="p" role="alert" aria-live="assertive" color="error">
-          {error}
-        </Typography>
-      </Container>
-    );
+    return <ErrorMessage message={error} />;
   }
 
   const columns: TaskStatus[] = ["To Do", "In Progress", "Done"];

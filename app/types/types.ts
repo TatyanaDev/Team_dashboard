@@ -24,3 +24,5 @@ export interface NotificationData {
   message: string;
   severity: "success" | "error";
 }
+
+export type TabKey = "info" | "tasks";
