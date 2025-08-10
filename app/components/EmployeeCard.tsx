@@ -5,7 +5,6 @@ import Image from "next/image";
 import type { Employee } from "../types/types";
 
 const CARD_SX = {
-  height: { xs: 360, md: 380 },
   width: "100%",
   display: "flex",
   flexDirection: "column",
