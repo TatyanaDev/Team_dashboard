@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, memo, useMemo, useCallback, useEffect, ReactElement } from "react";
+import { useState, memo, useMemo, useCallback, useEffect, ReactElement, Suspense, lazy } from "react";
 import { useParams } from "next/navigation";
+const TaskBoard = lazy(() => import("../../components/TaskBoard"));
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import { useEmployees } from "../../hooks/useEmployees";
-import TaskBoard from "../../components/TaskBoard";
 
 const EmployeeProfilePage = () => {
   const { id } = useParams();
@@ -83,8 +83,10 @@ const EmployeeProfilePage = () => {
             <h2>Tasks</h2>
             {/* Uncomment the <Bomb /> component below to test the ErrorBoundary fallback UI. */}
             <ErrorBoundary fallback={<div>Something went wrong while loading the task board</div>}>
-              {/* <Bomb /> */}
-              <TaskBoard />
+              <Suspense fallback={<div>Loading task board...</div>}>
+                {/* <Bomb /> */}
+                <TaskBoard />
+              </Suspense>
             </ErrorBoundary>
           </div>
         );
